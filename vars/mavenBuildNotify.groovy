@@ -20,7 +20,8 @@ def call(Map config = [:]) {
         try {
             dir(repoName) { // ✅ Run inside the repo folder
                 echo "Running Maven command: mvn ${mavenCmd}"
-                sh "mvn ${mavenCmd}"
+                sh "mvn ${mavenCmd} -Dmaven.compiler.source=8 -Dmaven.compiler.target=8 -Dmaven.compiler.release=8"
+
             }
         } catch (err) {
             buildStatus = "FAILED"
