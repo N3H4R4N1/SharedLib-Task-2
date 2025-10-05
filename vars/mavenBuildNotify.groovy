@@ -4,6 +4,7 @@ def call(Map config = [:]) {
     def repoUrl  = config.repoUrl  ?: 'https://github.com/example/project.git'
     def branch   = config.branch   ?: 'master'
     def mavenCmd = config.mavenCmd ?: 'clean package'
+    def emailId  = config.emailId  ?: 'youremail@example.com'   // ✅ Add your email here
     def repoName = repoUrl.tokenize('/').last().replace('.git', '')
     def buildStatus = "SUCCESS"
 
@@ -18,7 +19,7 @@ def call(Map config = [:]) {
         }
     }
 
-    // ===== Stage 2 : Build with Maven (JDK 11) =====
+    // ===== Stage 2 : Build with Maven (Temurin 11) =====
     stage('Build with Maven (Temurin 11)') {
         try {
             dir(repoName) {
@@ -53,6 +54,6 @@ def call(Map config = [:]) {
     // ===== Stage 4 : Send Notification =====
     stage('Send Notification') {
         def notifier = new org.example.Notification()
-        notifier.sendMessage(repoUrl, branch, mavenCmd, buildStatus)
+        notifier.sendMessage(repoUrl, branch, mavenCmd, buildStatus, emailId)
     }
 }
