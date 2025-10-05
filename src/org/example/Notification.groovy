@@ -2,16 +2,30 @@ package org.example
 
 class Notification implements Serializable {
 
-    def sendMessage(String repo, String branch, String command, String status) {
+    def sendMessage(String repo, String branch, String command, String status, String emailId) {
+        def subject = "🔔 Jenkins Build ${status}: ${repo}"
+        def body = """
+        <h2>Jenkins Build Notification</h2>
+        <p><b>Repository:</b> ${repo}</p>
+        <p><b>Branch:</b> ${branch}</p>
+        <p><b>Command:</b> mvn ${command}</p>
+        <p><b>Status:</b> ${status}</p>
+        <hr>
+        <p>Sent automatically by Jenkins Shared Library.</p>
+        """
+
         println "--------------------------------------"
-        println "🔔 Build Notification"
-        println "Repository : ${repo}"
-        println "Branch     : ${branch}"
-        println "Command    : mvn ${command}"
-        println "Status     : ${status}"
+        println "📧 Sending email to ${emailId}..."
+        println "Subject: ${subject}"
+        println "Status : ${status}"
         println "--------------------------------------"
 
-        // For Slack or Telegram, you can add API calls here.
-        // Example: sh "curl -X POST -H 'Content-type: application/json' --data '{\"text\":\"Build ${status} for ${repo}\"}' ${SLACK_WEBHOOK_URL}"
+        // ✅ Send email using Jenkins Email Extension
+        emailext(
+            subject: subject,
+            body: body,
+            to: emailId,
+            mimeType: 'text/html'
+        )
     }
 }
