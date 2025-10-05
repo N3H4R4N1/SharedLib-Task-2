@@ -51,9 +51,9 @@ def call(Map config = [:]) {
         }
     }
 
-    // ===== Stage 4 : Send Notification =====
-    stage('Send Notification') {
-        def notifier = new org.example.Notification()
-        notifier.sendMessage(repoUrl, branch, mavenCmd, buildStatus, emailId)
-    }
+// ===== Stage 4 : Send Notification =====
+stage('Send Notification') {
+    def notifier = new org.example.Notification(this)
+    notifier.sendMessage(repoUrl, branch, mavenCmd, buildStatus, emailId)
+  }
 }
